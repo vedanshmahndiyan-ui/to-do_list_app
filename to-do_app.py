@@ -3,7 +3,12 @@ import os
 FILENAME = 'tasks.txt'
 
 user_name = input("Enter your name: ")
-print(f"Hello, {user_name}! Welcome to the To-Do List App.")
+
+if user_name.isdigit():
+    print("Invalid input. Please enter a valid name.")
+    exit()
+else:
+    print(f"Hello, {user_name}! Welcome to the To-Do List App.")
 
 finished_tasks = []
 
@@ -26,10 +31,14 @@ load_tasks()
 
 def initial_tasks(task):
     num_tasks = int(input('how many tasks do you want to add to your to-do list?: '))
-    for i in range(num_tasks):
-        new_task = input(f"Enter task #{i + 1}: ")
-        tasks.append(new_task)
-        print(f"Task '{new_task}' added to your to-do list.")
+    if not num_tasks.isdigit():
+        print("Invalid input. Please enter a valid number.")
+        exit()
+    else:
+        for i in range(num_tasks):
+            new_task = input(f"Enter task #{i + 1}: ")
+            tasks.append(new_task)
+            print(f"Task '{new_task}' added to your to-do list.")
 
 def view_tasks():
     if tasks:
@@ -63,10 +72,25 @@ def quit():
     print("Exiting the To-Do List App. Goodbye!")
     exit()
 
+def task_update():
+    if tasks:
+        view_tasks()
+        task_index = int(input("Enter the number of the task you want to update: ")) - 1
+        if 0 <= task_index < len(tasks):
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            end_date = input("Enter end date (YYYY-MM-DD): ")
+            tasks[task_index] = tasks[task_index] + " | " + start_date + " | " + end_date
+            print(f"Task '{tasks[task_index]}' updated with dates.")
+        else:
+            print("Invalid task number.")
+    else:
+        print("Your to-do list is empty.")
+    save_tasks()
+
 initial_tasks(tasks)
 
 while True:
-    print('\nOptions -> view tasks[v] | add task[a] | finish task[f] | quit[q]')
+    print('\nOptions -> view tasks[v] | add task[a] | finish task[f] | update task[u] | quit[q]')
     choice = input('Enter your choice: ').lower()
     if choice == 'v':
         view_tasks()
@@ -74,6 +98,8 @@ while True:
         add_task()
     elif choice == 'f':
         finish_task()
+    elif choice == 'u':
+        task_update()
     elif choice == 'q':
         quit()
     elif choice == 'ilovedoom':
