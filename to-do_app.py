@@ -30,11 +30,12 @@ def save_tasks():
 load_tasks()
 
 def initial_tasks(task):
-    num_tasks = int(input('how many tasks do you want to add to your to-do list?: '))
+    num_tasks = input('how many tasks do you want to add to your to-do list?: ')
     if not num_tasks.isdigit():
         print("Invalid input. Please enter a valid number.")
         exit()
     else:
+        num_tasks = int(num_tasks)
         for i in range(num_tasks):
             new_task = input(f"Enter task #{i + 1}: ")
             tasks.append(new_task)
@@ -79,8 +80,13 @@ def task_update():
         if 0 <= task_index < len(tasks):
             start_date = input("Enter start date (YYYY-MM-DD): ")
             end_date = input("Enter end date (YYYY-MM-DD): ")
-            tasks[task_index] = tasks[task_index] + " | " + start_date + " | " + end_date
-            print(f"Task '{tasks[task_index]}' updated with dates.")
+            if end_date != "":
+                finished_task = tasks.pop(task_index)
+                finished_tasks.append(finished_task + " | " + start_date + " | " + end_date)
+                print(f"Task '{finished_task}' marked as finished with dates.")
+            else:
+                tasks[task_index] = tasks[task_index] + " | " + start_date
+                print(f"Task '{tasks[task_index]}' updated with start date.")
         else:
             print("Invalid task number.")
     else:
